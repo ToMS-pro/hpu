@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tracking HP Ini</title>
+</head>
+<body>
+  <h2>Melacak Lokasi HP Ini...</h2>
+  <p id="status">Mengambil data...</p>
+
+  <script>
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(pos) {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+        const akurasi = pos.coords.accuracy;
+        const userAgent = navigator.userAgent;
+
+        document.getElementById("status").innerText = 
+          `Lat: ${lat}, Lon: ${lon}, Akurasi: ${akurasi}m\nDevice: ${userAgent}`;
+
+        // Kirim ke Google Form, Server, atau Firebase kamu
+        fetch("https://your-server.com/simpan", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            latitude: lat,
+            longitude: lon,
+            akurasi: akurasi,
+            device: userAgent
+          })
+        });
+      });
+    } else {
+      document.getElementById("status").innerText = "Browser tidak mendukung GPS.";
+    }
+  </script>
+</body>
+</html>
